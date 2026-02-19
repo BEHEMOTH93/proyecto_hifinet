@@ -1,5 +1,6 @@
 # Importamos Flask para crear la app y render_template para leer archivos HTML
 from flask import Flask, render_template
+import os  # IMPORTANTE: Esta librería permite leer el puerto que Render nos asigna
 
 # Inicializamos la aplicación
 app = Flask(__name__)
@@ -20,6 +21,9 @@ def about():
 def clientes():
     return render_template('clientes.html')
 
-# Arranca el servidor en modo desarrollo (se actualiza solo al guardar)
+# CONFIGURACIÓN PARA DESPLIEGUE:
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Render asigna un puerto dinámico; si no existe (local), usa el 5000
+    port = int(os.environ.get('PORT', 5000))
+    # host='0.0.0.0' permite que el servidor sea accesible desde internet
+    app.run(host='0.0.0.0', port=port, debug=True)
