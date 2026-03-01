@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Servicios{% endblock %}
+
+{% block content %}
+<h2>Inventario de Servicios</h2>
+
+<a href="{{ url_for('agregar_servicio') }}">➕ Agregar Servicio</a>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Precio</th>
+        <th>Disponibilidad</th>
+        <th>Acción</th>
+    </tr>
+
+    {% for s in servicios %}
+    <tr>
+        <td>{{ s[0] }}</td>
+        <td>{{ s[1] }}</td>
+        <td>{{ s[2] }}</td>
+        <td>${{ s[3] }}</td>
+        <td>{{ s[4] }}</td>
+        <td>
+            <a href="/eliminar_servicio/{{ s[0] }}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

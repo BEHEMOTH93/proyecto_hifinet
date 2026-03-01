@@ -1,38 +1,26 @@
-{# 
-  ARCHIVO: base.html
-  DESCRIPCIÓN: Plantilla maestra que contiene la estructura global del sitio.
-  TECNOLOGÍA: Jinja2 permite herencia para no repetir código en cada página.
-#}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} - Hifinet</title>
-    
-    {# Enlazamos el CSS usando url_for, que es la forma correcta en Flask #}
+    <title>Hifinet Inventario</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
+
+<header class="navbar">
+    <div class="nav-container">
+        <h1>Hifinet ISP</h1>
         <nav>
-            <h1>Hifinet ISP</h1>
-            <ul>
-                {# Navegación dinámica: apunta a los nombres de las funciones en app.py #}
-                <li><a href="{{ url_for('index') }}">Inicio</a></li>
-                <li><a href="{{ url_for('about') }}">Nosotros</a></li>
-                <li><a href="{{ url_for('clientes') }}">Clientes</a></li>
-            </ul>
+            <a href="{{ url_for('index') }}">Inicio</a>
+            <a href="{{ url_for('about') }}">Nosotros</a>
+            <a href="{{ url_for('agregar') }}">Agregar</a>
         </nav>
-    </header>
+    </div>
+</header>
 
-    <main>
-        {# Este bloque será reemplazado por el contenido de las páginas hijas #}
-        {% block content %}{% endblock %}
-    </main>
+<div class="main-content">
+    {% block content %}{% endblock %}
+</div>
 
-    <footer>
-        <p>&copy; 2026 Hifinet - Tena, Ecuador</p>
-    </footer>
 </body>
 </html>
