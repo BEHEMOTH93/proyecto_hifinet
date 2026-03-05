@@ -1,0 +1,63 @@
+{%extends "base.html"%}
+
+{% block content %}
+
+<h2>Datos guardados en TXT</h2>
+<table border="1">
+    <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+    </tr>
+    {% for d in datos_txt %}
+    <tr>
+        <td>{{ d[0] }}</td>
+        <td>{{ d[1] }}</td>
+        <td>{{ d[2] }}</td>
+        <td>{{ d[3] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+
+<h2>Datos guardados en JSON</h2>
+<table border="1">
+    <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+    </tr>
+    {% for d in datos_json %}
+    <tr>
+        <td>{{ d.nombre }}</td>
+        <td>{{ d.descripcion }}</td>
+        <td>{{ d.cantidad }}</td>
+        <td>{{ d.precio }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+
+<h2>Datos guardados en CSV</h2>
+<table border="1">
+    <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+    </tr>
+    {% for d in datos_csv %}
+    <tr>
+        <td>{{ d[0] }}</td>
+        <td>{{ d[1] }}</td>
+        <td>{{ d[2] }}</td>
+        <td>{{ d[3] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
