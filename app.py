@@ -2,12 +2,28 @@ from flask import Flask, render_template, url_for, request, redirect, flash
 from form import ProductoForm
 from inventario.bd import init_db
 from inventario.inventario import Inventario
+from flask_sqlalchemy import SQLAlchemy
 import json
 import csv
 
 app = Flask(__name__)
 # Clave obligatoria para que funcionen los formularios Flask-WTF
 app.config['SECRET_KEY'] = 'clave_secreta_hifinet_2026'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///productos.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+class Producto(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100))
+    descripcion = db.Column(db.String(200))
+    cantidad = db.Column(db.Integer)
+    precio = db.Column(db.Float)
+
+with app.app_context():
+    db.create_all()
 
 init_db()
 inventario = Inventario()
@@ -23,6 +39,17 @@ def index():
         cantidad = form.cantidad.data
         precio = form.precio.data
         inventario.añadir(nombre, descripcion, cantidad, precio)
+
+        nuevo_producto = Producto(
+            nombre=nombre,
+            descripcion=descripcion,
+            cantidad=cantidad,
+            precio=precio
+        )
+
+        db.session.add(nuevo_producto)
+        db.session.commit()
+
         ruta_txt = "inventario/data/datos.txt"
         ruta_json = "inventario/data/datos.json"
         ruta_csv = "inventario/data/datos.csv"
@@ -89,7 +116,10 @@ def datos():
     except:
         pass
 
-    return render_template("datos.html", datos_txt=datos_txt, datos_json=datos_json, datos_csv=datos_csv)
+    #SQLITE
+    productos_sql = Producto.query.all()
+
+    return render_template("datos.html", datos_txt=datos_txt, datos_json=datos_json, datos_csv=datos_csv, productos_sql=productos_sql)
 
 @app.route('/eliminar/<int:id>')
 def eliminar(id):

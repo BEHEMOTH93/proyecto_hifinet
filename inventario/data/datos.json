@@ -4,5 +4,11 @@
         "descripcion": "INTERNET",
         "cantidad": 3,
         "precio": 21.0
+    },
+    {
+        "nombre": "Camara tipo foco",
+        "descripcion": "CAMARAS",
+        "cantidad": 10,
+        "precio": 25.0
     }
 ]
