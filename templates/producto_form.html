@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-top: 20px;">
+    <h2>Agregar Equipo a la Red</h2>
+    <hr style="margin-bottom: 20px;">
+    
+    <form action="{{ url_for('agregar') }}" method="POST">
+        {{ form.hidden_tag() }}
+        
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; font-size: 14px;">Nombre del Equipo (Ej: Router Cisco):</label><br>
+            {{ form.nombre(style="width: 300px; padding: 5px;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; font-size: 14px;">Descripción:</label><br>
+            {{ form.descripcion(style="width: 300px; padding: 5px;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; font-size: 14px;">Cantidad:</label><br>
+            {{ form.cantidad(style="width: 100px; padding: 5px;") }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; font-size: 14px;">Precio ($):</label><br>
+            {{ form.precio(style="width: 100px; padding: 5px;") }}
+        </div>
+
+        <button type="submit" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+            Guardar 
+        </button>
+        
+        <a href="{{ url_for('index') }}" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+            Cancelar
+        </a>
+    </form>
+</div>
+{% endblock %}

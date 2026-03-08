@@ -2,112 +2,83 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Hifinet | Gestión de Inventario</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hifinet ISP - Inventario</title>
+    
     <style>
-        .alert { padding: 15px; margin: 15px auto; max-width: 900px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; text-align: center; }
+        body { 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            background-color: #f8f9fa; /* Fondo clarito para el resto de la página */
+        }
+        .hifinet-header {
+            background-color: #0f177c; /* El azul oscuro de tu captura */
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .hifinet-titles h1 {
+            margin: 0 0 15px 0;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .hifinet-titles h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .hifinet-nav {
+            margin-top: 5px;
+        }
+        .hifinet-nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 16px;
+        }
+        .hifinet-nav a:hover {
+            text-decoration: underline;
+        }
+        /* Estilos básicos para botones si no usas Bootstrap */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-primary { background-color: #0d6efd; }
+        .btn-secondary { background-color: #6c757d; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <h1>BIENVENIDOS A HIFINET</h1>
-        <div class="nav-links">
-            <a href="/">Inicio</a>
-            <a href="#">Nosotros</a>
-            <a href="#">Clientes</a>
+    <header class="hifinet-header">
+        <div class="hifinet-titles">
+            <h1>BIENVENIDOS A HIFINET</h1>
+            <h2>INTERNET POR FIBRA OPTICA - STREAMING - VIDEO VIGILANCIA</h2>
         </div>
-        
-    </nav>
-    <nav class="navbar">
-        <h1>INTERNET POR FIBRA OPTICA - STREAMING - VIDEO VIGILANCIA</h1>
-    </nav>
+        <nav class="hifinet-nav">
+            <a href="{{ url_for('index') }}">Inicio</a>
+            <a href="{{ url_for('about') }}">Nosotros</a>
+            <a href="#">Clientes</a> 
+            <a href="{{ url_for('datos') }}" style="color: #ffc107; font-weight: bold;">Inventario y Archivos</a>
+        </nav>
+    </header>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <main class="container">
-        <section class="card">
-            <h3>Submenú: Agregar Equipo</h3>
-            <form action="/" method="POST" class="form-inline">
-                {{ form.hidden_tag() }}
-                <div class="form-group">
-                    <label>{{ form.nombre.label }}</label>
-                    {{ form.nombre(placeholder="Ej: Router Fibra") }}
-                </div>
-                <div class="form-group">
-                    <label>{{ form.descripcion.label }}</label>
-                    {{ form.descripcion(placeholder="Internet/Cámaras") }}
-                </div>
-                <div class="form-group">
-                    <label>{{ form.cantidad.label }}</label>
-                    {{ form.cantidad() }}
-                </div>
-                <div class="form-group">
-                    <label>{{ form.precio.label }}</label>
-                    {{ form.precio() }}
-                </div>
-                <div class="form-group" style="justify-content: flex-end;">
-                    {{ form.submit(class="btn-primary") }}
-                </div>
-            </form>
-        </section>
-
-        <section class="card">
-            <h3>Inventario Actual</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th><th>Nombre</th><th>Descripción</th><th>Stock</th><th>Precio $</th><th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in productos %}
-                    <tr>
-                        <td>{{ p.id }}</td>
-                        <td>{{ p.nombre }}</td>
-                        <td>{{ p.descripcion }}</td>
-                        <td colspan="3">
-                            <form action="/actualizar/{{ p.id }}" method="POST" class="mini-form" style="align-items: center;">
-                                <span style="width: 80px; display:inline-block;">{{ p.cantidad }} unid.</span>
-                                <span style="width: 80px; display:inline-block;">${{ p.precio }}</span>
-                                <input type="number" name="nueva_cantidad" value="{{ p.cantidad }}" required>
-                                <input type="number" step="0.01" name="nuevo_precio" value="{{ p.precio }}" required>
-                                <button type="submit" class="btn-update">Actualizar</button>
-                                <a href="/eliminar/{{ p.id }}" class="btn-danger" style="margin-left: 10px;">Eliminar</a>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
-        <section class="card">
-            <h3>Buscar Equipos</h3>
-            <form action="/buscar" method="GET" class="form-inline">
-                <div class="form-group" style="flex: 2;">
-                    <input type="text" name="query" placeholder="Buscar por nombre..." value="{{ busqueda }}">
-                </div>
-                <div class="form-group" style="flex: 0;">
-                    <button type="submit" class="btn-primary">Buscar</button>
-                </div>
-                {% if busqueda %}
-                <div class="form-group" style="flex: 0;">
-                    <a href="/" class="btn-primary" style="background-color: #666; text-decoration: none;">Limpiar</a>
-                </div>
-                {% endif %}
-            </form>
-        </section>
+    <main style="padding: 40px;">
+        {% block content %}
+        {% endblock %}
     </main>
 
-    <footer>
-        &copy; 2026 Hifinet - Tena, Ecuador
+    <footer style="text-align: center; padding: 20px; color: gray; margin-top: 50px;">
+        <p>&copy; 2026 Hifinet - Tena, Ecuador</p>
     </footer>
+
 </body>
 </html>

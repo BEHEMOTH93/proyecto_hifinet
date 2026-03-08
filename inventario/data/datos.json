@@ -10,5 +10,11 @@
         "descripcion": "CAMARAS",
         "cantidad": 10,
         "precio": 25.0
+    },
+    {
+        "nombre": "Motherboard Asus",
+        "descripcion": "Motherboard Asus Prime B760m-a-csm Socket 1700 Ddr5 Pcie Color Negro",
+        "cantidad": 10,
+        "precio": 170.0
     }
 ]

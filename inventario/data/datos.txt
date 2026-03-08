@@ -1,2 +1,3 @@
 Cable CAT 5e 30m,INTERNET,3,21.0
 Camara tipo foco,CAMARAS,10,25.0
+Motherboard Asus,Motherboard Asus Prime B760m-a-csm Socket 1700 Ddr5 Pcie Color Negro,10,170.0

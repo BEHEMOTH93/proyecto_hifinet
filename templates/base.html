@@ -2,25 +2,43 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Hifinet Inventario</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hifinet ISP - Inventario</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background-color: #f8f9fa; }
+        .hifinet-header { background-color: #0f177c; color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .hifinet-titles h1 { margin: 0 0 15px 0; font-size: 24px; font-weight: bold; letter-spacing: 1px; }
+        .hifinet-titles h2 { margin: 0; font-size: 16px; font-weight: bold; letter-spacing: 0.5px; }
+        .hifinet-nav { margin-top: 5px; }
+        .hifinet-nav a { color: white; text-decoration: none; margin-left: 25px; font-size: 16px; }
+        .hifinet-nav a:hover { text-decoration: underline; }
+        /* Resaltamos el menú de inventario */
+        .nav-destacado { color: #ffc107 !important; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-<header class="navbar">
-    <div class="nav-container">
-        <h1>Hifinet ISP</h1>
-        <nav>
+    <header class="hifinet-header">
+        <div class="hifinet-titles">
+            <h1>BIENVENIDOS A HIFINET</h1>
+            <h2>INTERNET POR FIBRA OPTICA - STREAMING - VIDEO VIGILANCIA</h2>
+        </div>
+        <nav class="hifinet-nav">
             <a href="{{ url_for('index') }}">Inicio</a>
             <a href="{{ url_for('about') }}">Nosotros</a>
-            <a href="{{ url_for('agregar') }}">Agregar</a>
+            <a href="#">Clientes</a> 
+            <a href="{{ url_for('datos') }}" class="nav-destacado">Inventario y Archivos</a>
         </nav>
-    </div>
-</header>
+    </header>
 
-<div class="main-content">
-    {% block content %}{% endblock %}
-</div>
+    <main style="padding: 40px;">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer style="text-align: center; padding: 20px; color: gray; margin-top: 50px;">
+        <p>&copy; 2026 Hifinet - Tena, Ecuador</p>
+    </footer>
 
 </body>
 </html>

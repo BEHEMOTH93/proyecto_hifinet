@@ -1,84 +1,46 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 
 {% block content %}
+<div style="text-align: left; margin-top: 20px;">
+    
+    <div style="margin-bottom: 30px;">
+        <a href="{{ url_for('agregar') }}" style="background-color: #0d6efd; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-right: 15px;">
+            ➕ Agregar Nuevo Equipo
+        </a>
+        
+        <a href="{{ url_for('index') }}" style="background-color: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            ⬅ Volver al Inicio
+        </a>
+    </div>
 
-<h2>Datos guardados en TXT</h2>
-<table border="1">
-    <tr>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-    </tr>
-    {% for d in datos_txt %}
-    <tr>
-        <td>{{ d[0] }}</td>
-        <td>{{ d[1] }}</td>
-        <td>{{ d[2] }}</td>
-        <td>{{ d[3] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <hr style="margin-bottom: 20px;">
 
-<br>
+    <h2>Persistencia de Datos con txt, json csv</h2>
+    
+    <br>
 
-<h2>Datos guardados en JSON</h2>
-<table border="1">
-    <tr>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-    </tr>
-    {% for d in datos_json %}
-    <tr>
-        <td>{{ d.nombre }}</td>
-        <td>{{ d.descripcion }}</td>
-        <td>{{ d.cantidad }}</td>
-        <td>{{ d.precio }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <h3>Txt</h3>
+    <ul style="list-style-type: disc; margin-left: 20px;">
+        {% for fila in datos_txt %}
+            <li>{{ fila | join(', ') }}</li>
+        {% endfor %}
+    </ul>
 
-<br>
+    <br>
 
-<h2>Datos guardados en CSV</h2>
-<table border="1">
-    <tr>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-    </tr>
-    {% for d in datos_csv %}
-    <tr>
-        <td>{{ d[0] }}</td>
-        <td>{{ d[1] }}</td>
-        <td>{{ d[2] }}</td>
-        <td>{{ d[3] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <h3>Json</h3>
+    <pre style="font-family: monospace; font-size: 14px;">
+{{ datos_json | tojson(indent=4) }}
+    </pre>
 
-<br>
+    <br>
 
-<h2>Datos guardados en SQLite (SQLAlchemy)</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-    </tr>
-    {% for p in productos_sql %}
-    <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.nombre }}</td>
-        <td>{{ p.descripcion }}</td>
-        <td>{{ p.cantidad }}</td>
-        <td>{{ p.precio }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <h3>Csv</h3>
+    <ul style="list-style-type: disc; margin-left: 20px;">
+        {% for fila in datos_csv %}
+            <li>{{ fila | join(', ') }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
 {% endblock %}
