@@ -16,5 +16,17 @@
         "descripcion": "Motherboard Asus Prime B760m-a-csm Socket 1700 Ddr5 Pcie Color Negro",
         "cantidad": 10,
         "precio": 170.0
+    },
+    {
+        "nombre": "Antena Hifinet",
+        "descripcion": "Antena de largo alcance",
+        "cantidad": 5,
+        "precio": 100.0
+    },
+    {
+        "nombre": "Router Wireless Tp-link Wifi 6 1500mbps Dual Band",
+        "descripcion": "wifi 6 / 6 antenas",
+        "cantidad": 10,
+        "precio": 80.0
     }
 ]
