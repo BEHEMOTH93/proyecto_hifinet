@@ -2,83 +2,48 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hifinet ISP - Inventario</title>
-    
+    <title>Hifinet - Inicio</title>
     <style>
-        body { 
-            margin: 0; 
-            font-family: Arial, sans-serif; 
-            background-color: #f8f9fa; /* Fondo clarito para el resto de la página */
-        }
-        .hifinet-header {
-            background-color: #0f177c; /* El azul oscuro de tu captura */
-            color: white;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .hifinet-titles h1 {
-            margin: 0 0 15px 0;
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-        .hifinet-titles h2 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-        }
-        .hifinet-nav {
-            margin-top: 5px;
-        }
-        .hifinet-nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 25px;
-            font-size: 16px;
-        }
-        .hifinet-nav a:hover {
-            text-decoration: underline;
-        }
-        /* Estilos básicos para botones si no usas Bootstrap */
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .btn-primary { background-color: #0d6efd; }
-        .btn-secondary { background-color: #6c757d; }
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #e5e7eb; }
+        /*franja azul */
+        .franja-azul { background-color: #0f177c; color: rgb(255, 255, 255); padding: 20px; text-align: center; }
+        .franja-azul a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+        
+        /* La barra de saludo */
+        .barra-usuario { background-color: #e9ecef; padding: 10px 40px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; }
+        .btn-logout { color: #d9534f; text-decoration: none; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <header class="hifinet-header">
-        <div class="hifinet-titles">
-            <h1>BIENVENIDOS A HIFINET</h1>
-            <h2>INTERNET POR FIBRA OPTICA - STREAMING - VIDEO VIGILANCIA</h2>
-        </div>
-        <nav class="hifinet-nav">
+    <div class="franja-azul">
+        <h1>HIFINET S.A.S</h1>
+        <nav>
             <a href="{{ url_for('index') }}">Inicio</a>
             <a href="{{ url_for('about') }}">Nosotros</a>
-            <a href="#">Clientes</a> 
-            <a href="{{ url_for('datos') }}" style="color: #ffc107; font-weight: bold;">Inventario y Archivos</a>
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('registro') }}">Registro</a>
+            {% else %}
+                <a href="{{ url_for('datos') }}">Inventario</a>
+            {% endif %}
         </nav>
-    </header>
+    </div>
 
-    <main style="padding: 40px;">
-        {% block content %}
-        {% endblock %}
-    </main>
+    {% if current_user.is_authenticated %}
+        <div class="barra-usuario">
+            <span>Hola, <strong>{{ current_user.nombre }}</strong></span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a>
+        </div>
+    {% endif %}
 
-    <footer style="text-align: center; padding: 20px; color: gray; margin-top: 50px;">
-        <p>&copy; 2026 Hifinet - Tena, Ecuador</p>
-    </footer>
+    <div style="padding: 50px; text-align: center;">
+        <h2>Bienvenidos a la plataforma de gestión HIFINET </h2>
+        
+        <p>Soluciones en Telecomunicaciones, Redes y Servicios de Video Vigilancia.</p>
+        <p> &#169; 2026 Hifinet - Tena, Ecuador</p>
+       
+    </div>
 
 </body>
 </html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Hifinet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body { background-color: #614683; font-family: Arial, sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-card { background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; overflow: hidden; padding-bottom: 30px; }
+        .imagen-formulario { width: 100%; height: 180px; object-fit: cover; }
+        .contenido { padding: 0 40px; }
+        h2 { text-align: center; color: #0f177c; margin: 20px 0; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        
+        /* AJUSTE AQUÍ: Estilos para la validación visual */
+        .form-group input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .input-error {
+            border: 2px solid #ff4d4d !important; /* Rojo */
+            background-color: #fff2f2;
+        }
+
+        .input-success {
+            border: 2px solid #0f177c !important; /* Azul Hifinet */
+            background-color: #f2f7ff;
+        }
+
+        .btn-login { width: 100%; padding: 12px; background-color: #0f177c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .mensajes-error { color: #d9534f; text-align: center; list-style: none; padding: 0; margin-bottom: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="{{ url_for('static', filename='imagen.jpg.jpeg') }}" class="imagen-formulario">
+        
+        <div class="contenido">
+            <h2>Registro</h2>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class="mensajes-error">
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+            <form action="/registro" method="POST">
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Contraseña:</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required>
+                </div>
+                
+                <button type="submit" class="btn-login">Registrarse</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <small>¿Ya tienes cuenta? <a href="/login" style="color: #0f177c;">Logueate aquí</a></small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirm_password");
+
+    function validarEmail(valor) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+    }
+
+    function actualizarEstilo(elemento, esValido) {
+        if (elemento.value === "") {
+            elemento.classList.remove("input-error", "input-success");
+        } else if (esValido) {
+            elemento.classList.remove("input-error");
+            elemento.classList.add("input-success");
+        } else {
+            elemento.classList.remove("input-success");
+            elemento.classList.add("input-error");
+        }
+    }
+
+    email.addEventListener("input", () => {
+        actualizarEstilo(email, validarEmail(email.value));
+    });
+
+    password.addEventListener("input", () => {
+        actualizarEstilo(password, password.value.length >= 6);
+        validarCoincidencia();
+    });
+
+    confirm.addEventListener("input", validarCoincidencia);
+
+    function validarCoincidencia() {
+        const coinciden = (password.value === confirm.value && confirm.value !== "");
+        actualizarEstilo(confirm, coinciden);
+        
+        if(!coinciden && confirm.value !== "") {
+            confirm.setCustomValidity("Las contraseñas no coinciden");
+        } else {
+            confirm.setCustomValidity("");
+        }
+    }
+    </script> 
+</body>
+</html>
