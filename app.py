@@ -1,10 +1,15 @@
 import os
+import sys
+
+# --- SOLUCIÓN PARA RENDER: Fuerza a Python a encontrar tus carpetas ---
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from datetime import datetime
 from flask import Flask, render_template, url_for, request, redirect, flash, send_file
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Tus importaciones de carpetas
+# Tus importaciones de carpetas (Ahora Render las encontrará)
 from models.usuario import Usuario 
 from conexion.conexion import obtener_conexion 
 from inventario.inventario import Inventario 
@@ -152,11 +157,9 @@ def reporte_pdf():
     
     if conexion:
         cursor = conexion.cursor(dictionary=True)
-        # 1. Traer productos
         cursor.execute("SELECT * FROM productos")
         productos = cursor.fetchall()
         
-        # 2. AUDITORÍA: Guardar en MySQL quién descarga
         try:
             sql_log = "INSERT INTO historial_descargas (id_usuario, nombre_usuario, fecha_hora, archivo_nombre) VALUES (%s, %s, %s, %s)"
             cursor.execute(sql_log, (current_user.id, current_user.nombre, ahora_dt, nombre_archivo_pdf))
@@ -167,21 +170,17 @@ def reporte_pdf():
             cursor.close()
             conexion.close()
 
-    # --- GENERACIÓN DEL PDF ---
     pdf = FPDF()
     pdf.add_page()
     
-    # Logo
     try:
         pdf.image('static/imagen.jpg.jpeg', 10, 8, 33)
     except: pass
 
-    # Título Azul
     pdf.set_font("Arial", 'B', 20)
     pdf.set_text_color(0, 51, 102)
     pdf.cell(80); pdf.cell(30, 10, "HIFINET S.A.", ln=True, align='C')
     
-    # Datos de descarga en el PDF (Derecha)
     pdf.set_font("Arial", 'I', 10); pdf.set_text_color(0, 0, 0)
     pdf.cell(0, 10, f"Generado por: {current_user.nombre}", ln=True, align='R')
     pdf.cell(0, 5, f"Fecha: {ahora_dt.strftime('%d/%m/%Y %H:%M:%S')}", ln=True, align='R')
@@ -191,7 +190,6 @@ def reporte_pdf():
     pdf.cell(0, 10, "REPORTE DE INVENTARIO DE EQUIPOS", ln=True, align='C')
     pdf.ln(5)
     
-    # Encabezados de Tabla
     pdf.set_font("Arial", 'B', 11)
     pdf.set_fill_color(0, 51, 102); pdf.set_text_color(255, 255, 255)
     pdf.cell(15, 10, 'ID', 1, 0, 'C', True)
@@ -200,7 +198,6 @@ def reporte_pdf():
     pdf.cell(25, 10, 'Precio', 1, 0, 'C', True)
     pdf.cell(25, 10, 'Cant.', 1, 1, 'C', True)
 
-    # Filas de Datos
     pdf.set_font("Arial", '', 10); pdf.set_text_color(0, 0, 0)
     for p in productos:
         id_p = p.get('id') or p.get('id_producto') or '0'
@@ -210,7 +207,6 @@ def reporte_pdf():
         pdf.cell(25, 10, f"${p.get('precio', 0.0)}", 1)
         pdf.cell(25, 10, str(p.get('cantidad') or p.get('stock') or '0'), 1); pdf.ln()
 
-    # Pie de página
     pdf.ln(10)
     pdf.set_font("Arial", 'I', 8)
     pdf.cell(0, 10, "Hifinet S.A. - Documento Interno de Control de Inventarios", 0, 0, 'C')
@@ -219,4 +215,6 @@ def reporte_pdf():
     return send_file(nombre_archivo_pdf, as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Puerto dinámico para Render
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
