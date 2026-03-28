@@ -3,10 +3,16 @@
 {% block content %}
 <div style="text-align: left; margin-top: 20px;">
     
-    <div style="margin-bottom: 30px;">
-        <a href="{{ url_for('agregar') }}" style="background-color: #0d6efd; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-right: 15px;">
-            ➕ Agregar Nuevo Equipo
-        </a>
+    <div style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <a href="{{ url_for('reporte_pdf') }}" style="background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-right: 15px;">
+                📄 Generar PDF
+            </a>
+            
+            <a href="{{ url_for('agregar') }}" style="background-color: #0d6efd; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                ➕ Nuevo Equipo
+            </a>
+        </div>
         
         <a href="{{ url_for('index') }}" style="background-color: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
             ⬅ Volver al Inicio
@@ -15,32 +21,41 @@
 
     <hr style="margin-bottom: 20px;">
 
-    <h2>Persistencia de Datos con txt, json csv</h2>
-    
+    <h2>Gestión de Equipos de Red (Hifinet MySQL)</h2>
     <br>
 
-    <h3>Txt</h3>
-    <ul style="list-style-type: disc; margin-left: 20px;">
-        {% for fila in datos_txt %}
-            <li>{{ fila | join(', ') }}</li>
-        {% endfor %}
-    </ul>
-
-    <br>
-
-    <h3>Json</h3>
-    <pre style="font-family: monospace; font-size: 14px;">
-{{ datos_json | tojson(indent=4) }}
-    </pre>
-
-    <br>
-
-    <h3>Csv</h3>
-    <ul style="list-style-type: disc; margin-left: 20px;">
-        {% for fila in datos_csv %}
-            <li>{{ fila | join(', ') }}</li>
-        {% endfor %}
-    </ul>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+            <tr style="background-color: #343a40; color: white; text-align: left;">
+                <th style="padding: 10px; border: 1px solid #dee2e6;">ID</th>
+                <th style="padding: 10px; border: 1px solid #dee2e6;">Nombre</th>
+                <th style="padding: 10px; border: 1px solid #dee2e6;">Precio</th>
+                <th style="padding: 10px; border: 1px solid #dee2e6;">Stock</th>
+                <th style="padding: 10px; border: 1px solid #dee2e6;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">{{ p.id }}</td>
+                <td style="padding: 10px;">{{ p.nombre }}</td>
+                <td style="padding: 10px;">${{ p.precio }}</td>
+                <td style="padding: 10px;">{{ p.stock }}</td>
+                <td style="padding: 10px;">
+                    <a href="{{ url_for('eliminar_producto', id=p.id) }}" 
+                       style="color: #dc3545; text-decoration: none; font-weight: bold; border: 1px solid #dc3545; padding: 5px 10px; border-radius: 3px;"
+                       onclick="return confirm('¿Estás seguro de que deseas eliminar el equipo: {{ p.nombre }}?');">
+                        ELIMINAR
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="padding: 20px; text-align: center; color: #6c757d;">No hay equipos registrados en la base de datos.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </div>
 {% endblock %}

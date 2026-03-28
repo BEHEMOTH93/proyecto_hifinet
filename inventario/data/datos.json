@@ -28,5 +28,15 @@
         "descripcion": "wifi 6 / 6 antenas",
         "cantidad": 10,
         "precio": 80.0
+    },
+    {
+        "nombre": "LAPTOP LENOVO I5",
+        "precio": 700.0,
+        "stock": 10
+    },
+    {
+        "nombre": "Memoria Ram kingston 16 Gb DDR4",
+        "precio": 110.0,
+        "stock": 10
     }
 ]
