@@ -1,6 +1,6 @@
 Proyecto Hifinet
 Trabajo grupal
 Integrantes:
-Madelyn Nicol Moyano Zambrano
-Rafael Alejandro López Torres
+Madelyn Nicol Moyano Zambrano_
+Rafael Alejandro López Torres_
 Darwin David Maiza Zambrano
