@@ -1,32 +1,52 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div style="margin-top: 20px; max-width: 500px;">
-    <h2> Agregar Equipo a Hifinet</h2>
+<div style="max-width: 500px; margin: 30px auto; padding: 25px; border: 1px solid #ddd; border-radius: 10px; background: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05);">
+    <h2 style="color: #212529;">{{ 'Editar Equipo' if producto else 'Nuevo Equipo para Hifinet' }}</h2>
     <hr>
-    <form action="{{ url_for('agregar') }}" method="POST">
-    <div style="margin-bottom: 15px;">
-        <label>Nombre del Equipo:</label><br>
-        <input type="text" name="txt_nombre" style="width: 100%; padding: 8px;" required>
-    </div>
+    <form method="POST">
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold;">Nombre del Equipo:</label>
+            <input type="text" name="nombre" value="{{ producto.nombre if producto else '' }}" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;" required>
+        </div>
 
-    <div style="margin-bottom: 15px;">
-        <label>Descripción / Detalles:</label><br>
-        <textarea name="txt_descripcion" style="width: 100%; padding: 8px; height: 80px;" placeholder="Ej: Router de borde para el nodo norte"></textarea>
-    </div>
+        <div style="margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label style="font-weight: bold;">Categoría (Relacional):</label>
+                <a href="{{ url_for('agregar_categoria') }}" style="font-size: 0.8em; color: #0d6efd; text-decoration: none; font-weight: bold;">+ NUEVA CATEGORÍA</a>
+            </div>
+            <select name="id_categoria" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc;" required>
+                <option value="">-- Seleccione una --</option>
+                {% for cat in categorias %}
+                <option value="{{ cat.id_categoria }}" {% if producto and producto.id_categoria == cat.id_categoria %} selected {% endif %}>
+                    {{ cat.nombre_categoria }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <div style="margin-bottom: 15px;">
-        <label>Precio ($):</label><br>
-        <input type="number" step="0.01" name="txt_precio" style="width: 100%; padding: 8px;" required>
-    </div>
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold;">Descripción:</label>
+            <textarea name="descripcion" style="width: 100%; padding: 10px; margin-top: 5px; height: 70px; border-radius: 5px; border: 1px solid #ccc;">{{ producto.descripcion if producto else '' }}</textarea>
+        </div>
 
-    <div style="margin-bottom: 20px;">
-        <label>Stock (Cantidad):</label><br>
-        <input type="number" name="txt_stock" style="width: 100%; padding: 8px;" required>
-    </div>
+        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+                <label style="font-weight: bold;">Precio ($):</label>
+                <input type="number" step="0.01" name="precio" value="{{ producto.precio if producto else '' }}" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" required>
+            </div>
+            <div style="flex: 1;">
+                <label style="font-weight: bold;">Stock actual:</label>
+                <input type="number" name="stock" value="{{ producto.cantidad if producto else '' }}" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" required>
+            </div>
+        </div>
 
-    <button type="submit" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
-        Guardar Equipo
-    </button>
-</form>
+        <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="{{ url_for('listar_productos') }}" style="color: #6c757d; text-decoration: none;">Cancelar</a>
+            <button type="submit" style="background-color: #198754; color: white; padding: 12px 30px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                {{ 'Actualizar' if producto else 'Guardar Equipo' }}
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock %}
