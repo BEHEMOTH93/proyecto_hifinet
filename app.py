@@ -44,6 +44,7 @@ def index():
 
 @app.route('/about')
 def about():
+    # Único cambio: Asegurar que renderice la nueva plantilla de Nosotros
     return render_template('about.html')
 
 # --- AUTENTICACIÓN ---
@@ -64,7 +65,6 @@ def login():
             if data and check_password_hash(data[3], password):
                 user = Usuario(data[0], data[1], data[2], data[3])
                 login_user(user)
-                # FORZAMOS EL REDIRECCIONAMIENTO AL INDEX (INICIO)
                 return redirect(url_for('index')) 
                 
             flash('Login incorrecto')
@@ -98,7 +98,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# --- GESTIÓN DE PRODUCTOS (CRUD RELACIONAL) ---
+# --- GESTIÓN DE PRODUCTOS ---
 
 @app.route('/datos')
 @login_required
@@ -109,7 +109,7 @@ def listar_productos():
         cursor = conexion.cursor(dictionary=True)
         sql = """
             SELECT p.id, p.nombre, p.descripcion, p.cantidad, p.precio, p.id_categoria, 
-                   c.nombre_categoria 
+                    c.nombre_categoria 
             FROM productos p 
             LEFT JOIN categorias c ON p.id_categoria = c.id_categoria
         """
@@ -142,7 +142,7 @@ def agregar():
     cats = cursor.fetchall()
     cursor.close()
     conexion.close()
-    return render_template('producto_form.html', categorias=cats)
+    return render_template('producto_form.html', categorias=cats, producto=None)
 
 @app.route('/editar/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -155,7 +155,7 @@ def editar_producto(id):
         stock = request.form.get('stock')
         id_cat = request.form.get('id_categoria')
         cursor.execute("UPDATE productos SET nombre=%s, precio=%s, cantidad=%s, id_categoria=%s WHERE id=%s", 
-                       (nombre, precio, stock, id_cat, id))
+                        (nombre, precio, stock, id_cat, id))
         conexion.commit()
         cursor.close()
         conexion.close()
@@ -223,7 +223,7 @@ def exportar(formato):
         return Response(res, mimetype='text/plain',
                         headers={"Content-disposition": "attachment; filename=inventario.txt"})
 
-# --- REPORTE PDF PROFESIONAL (ESTILO EXACTO IMAGEN 2) ---
+# --- REPORTE PDF (RESTAURADO ORIGINAL) ---
 
 @app.route('/reporte_pdf')
 @login_required
@@ -235,12 +235,10 @@ def reporte_pdf():
     
     if conexion:
         cursor = conexion.cursor(dictionary=True)
-        # Traemos descripción y categoría
         sql = "SELECT p.*, c.nombre_categoria FROM productos p LEFT JOIN categorias c ON p.id_categoria = c.id_categoria"
         cursor.execute(sql)
         productos = cursor.fetchall()
         
-        # Auditoría
         try:
             sql_log = "INSERT INTO historial_descargas (id_usuario, nombre_usuario, fecha_hora, archivo_nombre) VALUES (%s, %s, %s, %s)"
             cursor.execute(sql_log, (current_user.id, current_user.nombre, ahora_dt, nombre_archivo_pdf))
@@ -253,31 +251,25 @@ def reporte_pdf():
     pdf = FPDF()
     pdf.add_page()
     
-    # 1. LOGO IZQUIERDA
     try:
         pdf.image('static/imagen.jpg.jpeg', 10, 8, 33)
     except: pass
 
-    # 2. TITULO AZUL HIFINET S.A.
     pdf.set_font("Arial", 'B', 20)
-    pdf.set_text_color(0, 51, 102) # Color azul oscuro de la imagen
+    pdf.set_text_color(0, 51, 102) 
     pdf.cell(80); pdf.cell(30, 10, "HIFINET S.A.", ln=True, align='C')
     
-    # 3. USUARIO Y FECHA DERECHA
     pdf.set_font("Arial", 'I', 10); pdf.set_text_color(0, 0, 0)
     pdf.cell(0, 10, f"Generado por: {current_user.nombre}", ln=True, align='R')
     pdf.cell(0, 5, f"Fecha: {ahora_dt.strftime('%d/%m/%Y %H:%M:%S')}", ln=True, align='R')
     
     pdf.ln(10)
-    
-    # 4. TITULO CENTRAL
     pdf.set_font("Arial", 'B', 16)
     pdf.cell(0, 10, "REPORTE DE INVENTARIO DE EQUIPOS", ln=True, align='C')
     pdf.ln(5)
     
-    # 5. CABECERA TABLA (AZUL)
     pdf.set_font("Arial", 'B', 11)
-    pdf.set_fill_color(0, 51, 102); pdf.set_text_color(255, 255, 255) # Azul fondo, Blanco texto
+    pdf.set_fill_color(0, 51, 102); pdf.set_text_color(255, 255, 255) 
     
     pdf.cell(15, 10, 'ID', 1, 0, 'C', True)
     pdf.cell(65, 10, 'Producto', 1, 0, 'C', True)
@@ -285,7 +277,6 @@ def reporte_pdf():
     pdf.cell(30, 10, 'Precio', 1, 0, 'C', True)
     pdf.cell(30, 10, 'Cant.', 1, 1, 'C', True)
 
-    # 6. FILAS DE LA TABLA
     pdf.set_font("Arial", '', 10); pdf.set_text_color(0, 0, 0)
     for p in productos:
         pdf.cell(15, 10, str(p.get('id', '0')), 1, 0, 'C')
@@ -294,12 +285,10 @@ def reporte_pdf():
         pdf.cell(30, 10, f"${p.get('precio', 0.0)}", 1, 0, 'R')
         pdf.cell(30, 10, str(p.get('cantidad', '0')), 1, 1, 'C')
 
-    # 7. PIE DE PÁGINA
     pdf.ln(10)
     pdf.set_font("Arial", 'I', 8)
     pdf.cell(0, 10, "Hifinet S.A. - Documento Interno de Control de Inventarios", 0, 0, 'C')
 
-    # ENVIAR EL ARCHIVO DIRECTAMENTE
     output = io.BytesIO()
     pdf_out = pdf.output(dest='S').encode('latin-1')
     output.write(pdf_out)
@@ -308,4 +297,4 @@ def reporte_pdf():
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)

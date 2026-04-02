@@ -38,5 +38,10 @@
         "nombre": "Memoria Ram kingston 16 Gb DDR4",
         "precio": 110.0,
         "stock": 10
+    },
+    {
+        "nombre": "Streaming 150 canales Nacional/Internacional",
+        "precio": 5.0,
+        "stock": 100
     }
 ]

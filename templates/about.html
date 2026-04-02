@@ -1,8 +1,78 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card">
-    <h2>Nosotros</h2>
-    <p>Hifinet ISP - Sistema de Gestión de Inventario de HIFINET.</p>
+<div class="text-center mb-5">
+    <h1 style="color: #1a237e; font-weight: 800; font-size: 38px; letter-spacing: -1px;">Sobre Hifinet</h1>
+    <p class="text-muted fs-5">Líderes en conectividad de alta velocidad y soporte técnico especializado.</p>
+    <div style="width: 80px; height: 5px; background: #1a237e; margin: 20px auto; border-radius: 10px;"></div>
+</div>
+
+<div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
+    <div class="row align-items-center p-4">
+        <div class="col-md-8">
+            <h3 style="color: #1a237e; font-weight: 700; margin-bottom: 20px;">Nuestra Identidad</h3>
+            <p style="line-height: 1.8; color: #444; font-size: 16px;">
+                <strong>Hifinet ISP</strong> es una organización dedicada al despliegue de soluciones avanzadas en telecomunicaciones. 
+                Nos especializamos en infraestructura de <strong>Fibra Óptica (FTTH)</strong>, sistemas de video vigilancia IP y servicios de streaming, 
+                garantizando una arquitectura de red robusta y un respaldo técnico de campo con tiempos de respuesta inmediatos.
+            </p>
+            <div class="p-3 rounded-3" style="background-color: #f8f9ff; border-left: 4px solid #1a237e;">
+                <p class="small mb-0 text-dark">
+                    <i class="fas fa-microchip me-2 text-primary"></i> 
+                    <strong>Gestión Tecnológica:</strong> Este sistema de inventario optimiza la administración de activos críticos, asegurando la trazabilidad de equipos para mantener la continuidad operativa de nuestros abonados.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center d-none d-md-block">
+            <i class="fas fa-server fa-6x" style="color: #e8eaf6;"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-md-4">
+        <div class="card h-100 text-center shadow-sm border-0 p-4" style="border-radius: 15px;">
+            <div class="mb-3">
+                <i class="fas fa-bullseye fa-3x" style="color: #1a237e;"></i>
+            </div>
+            <h4 class="fw-bold" style="color: #1a237e;">Misión</h4>
+            <p class="text-muted" style="font-size: 14px;">Garantizar servicios de conectividad con los más altos estándares de calidad, impulsando el desarrollo digital y la productividad de nuestros clientes mediante tecnología de vanguardia.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center shadow-sm border-0 p-4" style="border-radius: 15px;">
+            <div class="mb-3">
+                <i class="fas fa-rocket fa-3x" style="color: #1a237e;"></i>
+            </div>
+            <h4 class="fw-bold" style="color: #1a237e;">Visión</h4>
+            <p class="text-muted" style="font-size: 14px;">Consolidarnos como el proveedor de servicios de internet referente en la región, destacándonos por la innovación en infraestructura de red y la excelencia en el soporte técnico.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center shadow-sm border-0 p-4" style="border-radius: 15px;">
+            <div class="mb-3">
+                <i class="fas fa-shield-alt fa-3x" style="color: #1a237e;"></i>
+            </div>
+            <h4 class="fw-bold" style="color: #1a237e;">Valores</h4>
+            <p class="text-muted" style="font-size: 14px;">Operamos bajo principios de transparencia técnica, integridad profesional, responsabilidad social y un compromiso inquebrantable con la satisfacción del usuario final.</p>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5 p-4 text-center rounded-4 shadow-sm" style="background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); color: white;">
+    <div class="row">
+        <div class="col-md-4">
+            <h6 class="text-uppercase small fw-bold opacity-75">Soporte Técnico</h6>
+            <p class="mb-0 fw-bold">24/7 Monitoreo de Red</p>
+        </div>
+        <div class="col-md-4 border-start border-end border-white border-opacity-25">
+            <h6 class="text-uppercase small fw-bold opacity-75">Tecnología</h6>
+            <p class="mb-0 fw-bold">Fibra Óptica Pura</p>
+        </div>
+        <div class="col-md-4">
+            <h6 class="text-uppercase small fw-bold opacity-75">Cobertura</h6>
+            <p class="mb-0 fw-bold">Tena y Alrededores</p>
+        </div>
+    </div>
 </div>
 {% endblock %}
